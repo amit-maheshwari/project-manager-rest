@@ -1,24 +1,29 @@
 package com.cognizant.learn.projectManager.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.sql.Date;
+import javax.persistence.*;
+import java.util.Date;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 public class Project {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Column (name = "Project_ID")
     private Long project_Id;
+
     @Column (name = "Project", nullable = false)
     private String project;
+
+    @Temporal(value = TemporalType.DATE)
     @Column (name = " Start_Date")
     private Date start_date;
+
+    @Temporal(value = TemporalType.DATE)
     @Column (name= "End_Date")
     private Date end_date;
+
     private int priority;
 
     public Project(){};

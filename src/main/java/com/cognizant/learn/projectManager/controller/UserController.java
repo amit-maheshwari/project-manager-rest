@@ -1,7 +1,7 @@
 package com.cognizant.learn.projectManager.controller;
 
 import com.cognizant.learn.projectManager.model.User;
-import com.cognizant.learn.projectManager.repository.UserRepository;
+import com.cognizant.learn.projectManager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -16,16 +17,16 @@ import java.util.Optional;
 @RequestMapping(path="/fsd")
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/users")
     public List<User> getAllUsers(){
-        return userRepository.findAll();
+        return userService.findAll();
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable long id) {
-        Optional<User> user = userRepository.findById(id);
+    public User getUser(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+        Optional<User> user = userService.findById(id);
 
         if (!user.isPresent())
             System.out.println("User not found-"+id);
@@ -35,28 +36,24 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+        userService.delete(id);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable long id) {
+    public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
-        Optional<User> userOptional = userRepository.findById(id);
+        Optional<User> userOptional = userService.update(user, id);
 
         if (!userOptional.isPresent())
             return ResponseEntity.notFound().build();
-
-        user.setUser_Id(id);
-
-        userRepository.save(user);
 
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/users")
     public ResponseEntity<Object> addUser(@RequestBody User user) {
-        User savedUser = userRepository.save(user);
+        User savedUser = userService.add(user);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedUser.getUser_Id()).toUri();

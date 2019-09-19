@@ -17,7 +17,7 @@ public class User {
     @Column (name = "Last_Name", nullable = false)
     private String lastName;
     @Column (name = "Employee_ID", nullable = false)
-    private Long employee_Id;
+    private int employee_Id;
     @Column (name = "Project_ID")
     private Long project_Id;
     @Column (name = "Task_ID")
@@ -49,11 +49,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Long getEmployee_Id() {
+    public int getEmployee_Id() {
         return employee_Id;
     }
 
-    public void setEmployee_Id(Long employee_Id) {
+    public void setEmployee_Id(int employee_Id) {
         this.employee_Id = employee_Id;
     }
 

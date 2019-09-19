@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -26,7 +27,7 @@ public class ProjectController {
     }
 
     @GetMapping("/projects/{id}")
-    public Project getProject(@PathVariable long id) {
+    public Project getProject(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         Optional<Project> project = projectRepository.findById(id);
 
         if (!project.isPresent())
@@ -37,27 +38,12 @@ public class ProjectController {
     }
 
     @DeleteMapping("/projects/{id}")
-    public void deleteProject(@PathVariable long id) {
+    public void deleteProject(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         projectRepository.deleteById(id);
     }
 
-    @PutMapping("/projects/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody Project project, @PathVariable long id) {
-
-        Optional<Project> projectOptional = projectRepository.findById(id);
-
-        if (!projectOptional.isPresent())
-            return ResponseEntity.notFound().build();
-
-        project.setProjectId(id);
-
-        projectRepository.save(project);
-
-        return ResponseEntity.noContent().build();
-    }
-
     @PostMapping("/projects")
-    public ResponseEntity<Object> addUser(@RequestBody Project project) {
+    public ResponseEntity<Object> addProject(@RequestBody Project project, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         Project savedProject = projectRepository.save(project);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

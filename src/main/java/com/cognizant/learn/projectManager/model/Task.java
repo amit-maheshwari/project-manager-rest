@@ -1,29 +1,40 @@
 package com.cognizant.learn.projectManager.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.sql.Date;
+import javax.persistence.*;
+import java.util.Date;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 public class Task {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Column (name = "Task_ID")
     private Long task_id;
-    @Column (name = "Parent_ID")
-    private Long parent_id;
+
+    @JoinColumn(name = "Parent_ID")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    ParentTask parentTask;
+
     @Column (name = "Project_ID")
     private Long project_id;
+
+    @Column(name = "Task", unique = true, nullable = false, length = 20)
     private String task;
+
+    @Temporal(value = TemporalType.DATE)
     @Column (name = "Start_Date")
     private Date start_date;
+
+    @Temporal(value = TemporalType.DATE)
     @Column (name = "End_Date")
     private Date end_date;
     private int priority;
     private String status;
+
+    @Transient
+    private String isEnded;
 
     public Task(){};
 
@@ -35,12 +46,12 @@ public class Task {
         this.task_id = task_id;
     }
 
-    public Long getParent_id() {
-        return parent_id;
+    public ParentTask getParentTask() {
+        return parentTask;
     }
 
-    public void setParent_id(Long parent_id) {
-        this.parent_id = parent_id;
+    public void setParentTask(ParentTask parentTask) {
+        this.parentTask = parentTask;
     }
 
     public Long getProject_id() {
@@ -89,5 +100,11 @@ public class Task {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIsEnded() {
+        if(end_date == null)
+            return "N";
+        return end_date.compareTo(new Date(System.currentTimeMillis())) > 0 ? "Y" : "N";
     }
 }
