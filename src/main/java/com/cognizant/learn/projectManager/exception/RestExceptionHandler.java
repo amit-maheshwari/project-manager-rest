@@ -26,9 +26,15 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(new ErrorDetail(message), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(DuplicateUserException.class)
-    public ResponseEntity<ErrorDetail> handleDuplicateException(DuplicateUserException e){
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<ErrorDetail> handleDuplicateException(DuplicateException e){
         String message = Translator.toLocale(e.getMessage(), new Object[]{e.getId()} );
         return new ResponseEntity<>(new ErrorDetail(message), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorDetail> handleEntityNotFoundException(EntityNotFoundException e){
+        String message = Translator.toLocale(e.getMessage(), new Object[]{e.getId()} );
+        return new ResponseEntity<>(new ErrorDetail(message), HttpStatus.NOT_FOUND);
     }
 }

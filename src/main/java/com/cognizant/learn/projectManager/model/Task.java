@@ -9,7 +9,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue
     @Column (name = "Task_ID")
     private Long task_id;
 
@@ -25,16 +25,15 @@ public class Task {
 
     @Temporal(value = TemporalType.DATE)
     @Column (name = "Start_Date")
-    private Date start_date;
+    private Date startDate;
 
     @Temporal(value = TemporalType.DATE)
     @Column (name = "End_Date")
-    private Date end_date;
+    private Date endDate;
     private int priority;
-    private String status;
+    @Column(name = "status", nullable = false)
+    private String status = "Started";
 
-    @Transient
-    private String isEnded;
 
     public Task(){};
 
@@ -70,20 +69,20 @@ public class Task {
         this.task = task;
     }
 
-    public Date getStart_date() {
-        return start_date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(Date start_date) {
-        this.start_date = start_date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public int getPriority() {
@@ -102,9 +101,4 @@ public class Task {
         this.status = status;
     }
 
-    public String getIsEnded() {
-        if(end_date == null)
-            return "N";
-        return end_date.compareTo(new Date(System.currentTimeMillis())) > 0 ? "Y" : "N";
-    }
 }

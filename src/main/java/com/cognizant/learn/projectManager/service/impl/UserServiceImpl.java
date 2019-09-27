@@ -1,6 +1,6 @@
 package com.cognizant.learn.projectManager.service.impl;
 
-import com.cognizant.learn.projectManager.exception.DuplicateUserException;
+import com.cognizant.learn.projectManager.exception.DuplicateException;
 import com.cognizant.learn.projectManager.model.User;
 import com.cognizant.learn.projectManager.repository.UserRepository;
 import com.cognizant.learn.projectManager.service.UserService;
@@ -18,9 +18,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User add(User user) {
-        User userExists = userRepository.findByEmployeeId(user.getEmployee_Id());
+        User userExists = userRepository.findByEmployeeId(user.getEmployeeId());
         if(userExists != null)
-            throw new DuplicateUserException("user.exists",String.valueOf(user.getEmployee_Id()));
+            throw new DuplicateException("user.exists",String.valueOf(user.getEmployeeId()));
         return userRepository.save(user);
     }
 
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> update(User user, Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
+       Optional<User> userOptional = userRepository.findById(id);
         if(!userOptional.isPresent())
             return  userOptional;
         user.setUser_Id(id);

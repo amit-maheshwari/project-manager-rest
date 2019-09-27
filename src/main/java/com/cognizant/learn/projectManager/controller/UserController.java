@@ -28,22 +28,18 @@ public class UserController {
     public User getUser(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         Optional<User> user = userService.findById(id);
 
-        if (!user.isPresent())
-            System.out.println("User not found-"+id);
-           // throw new Exception("id-" + id);
-
         return user.get();
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public void deleteUser(@PathVariable long id) {
         userService.delete(id);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<Object> updateUser(@RequestBody User user, @PathVariable Long id) {
 
-        Optional<User> userOptional = userService.update(user, id);
+        Optional<User> userOptional = userService.update(user, Long.valueOf(id));
 
         if (!userOptional.isPresent())
             return ResponseEntity.notFound().build();

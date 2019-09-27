@@ -4,6 +4,7 @@ import com.cognizant.learn.projectManager.model.Project;
 import com.cognizant.learn.projectManager.model.User;
 import com.cognizant.learn.projectManager.repository.ProjectRepository;
 import com.cognizant.learn.projectManager.repository.UserRepository;
+import com.cognizant.learn.projectManager.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +20,16 @@ import java.util.Optional;
 @RequestMapping(path="/fsd")
 public class ProjectController {
     @Autowired
-    private ProjectRepository projectRepository;
+    private ProjectService projectService;
 
     @GetMapping("/projects")
     public List<Project> getAllProjects(){
-        return projectRepository.findAll();
+        return projectService.findAll();
     }
 
     @GetMapping("/projects/{id}")
-    public Project getProject(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        Optional<Project> project = projectRepository.findById(id);
+    public Project getProject(@PathVariable long id) {
+        Optional<Project> project = projectService.findById(id);
 
         if (!project.isPresent())
             System.out.println("User not found-"+id);
@@ -38,13 +39,13 @@ public class ProjectController {
     }
 
     @DeleteMapping("/projects/{id}")
-    public void deleteProject(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        projectRepository.deleteById(id);
+    public void deleteProject(@PathVariable long id) {
+        projectService.delete(id);
     }
 
     @PostMapping("/projects")
-    public ResponseEntity<Object> addProject(@RequestBody Project project, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
-        Project savedProject = projectRepository.save(project);
+    public ResponseEntity<Object> addProject(@RequestBody Project project) {
+        Project savedProject = projectService.add(project);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedProject.getProjectId()).toUri();

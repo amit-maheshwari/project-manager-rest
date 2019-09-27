@@ -9,18 +9,20 @@ import java.util.Set;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ParentTask {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue
     @Column(name = "Parent_ID")
     private Long parent_id;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentTask")
+    @JsonIgnoreProperties("parentTask")
     Set<Task> tasks = new HashSet<>(0);
 
     @Column(name = "PARENT_TASK", nullable = false)
-    String task;
+    Long task_id;
 
     public Long getParent_id() {
         return parent_id;
@@ -36,5 +38,13 @@ public class ParentTask {
 
     public void addTasks(Task task){
         this.tasks.add(task);
+    }
+
+    public Long getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(Long task_id) {
+        this.task_id = task_id;
     }
 }

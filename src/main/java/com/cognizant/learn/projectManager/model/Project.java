@@ -3,13 +3,11 @@ package com.cognizant.learn.projectManager.model;
 import javax.persistence.*;
 import java.util.Date;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @Entity
 public class Project {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue
     @Column (name = "Project_ID")
     private Long project_Id;
 
@@ -18,13 +16,21 @@ public class Project {
 
     @Temporal(value = TemporalType.DATE)
     @Column (name = " Start_Date")
-    private Date start_date;
+    private Date startDate;
 
     @Temporal(value = TemporalType.DATE)
     @Column (name= "End_Date")
-    private Date end_date;
+    private Date endDate;
 
     private int priority;
+
+    @Column(name = "manager_id")
+    private String managerId;
+
+    @Transient
+    private int totalTask;
+    @Transient
+    private int completedTask;
 
     public Project(){};
 
@@ -44,20 +50,28 @@ public class Project {
         this.project = project;
     }
 
-    public Date getStart_date() {
-        return start_date;
+    public Long getProject_Id() {
+        return project_Id;
     }
 
-    public void setStart_date(Date start_date) {
-        this.start_date = start_date;
+    public void setProject_Id(Long project_Id) {
+        this.project_Id = project_Id;
     }
 
-    public Date getEnd_date() {
-        return end_date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setEnd_date(Date end_date) {
-        this.end_date = end_date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public int getPriority() {
@@ -66,5 +80,29 @@ public class Project {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
+
+    public int getTotalTask() {
+        return totalTask;
+    }
+
+    public void setTotalTask(int totalTask) {
+        this.totalTask = totalTask;
+    }
+
+    public int getCompletedTask() {
+        return completedTask;
+    }
+
+    public void setCompletedTask(int completedTask) {
+        this.completedTask = completedTask;
     }
 }
