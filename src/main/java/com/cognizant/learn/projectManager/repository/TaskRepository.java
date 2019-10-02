@@ -19,4 +19,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("select t from Task t where t.project_id = ?1")
     List<Task> findTasksByProjectId(Long projectId);
+
+    @Query("select t from Task t where t.parentTask is null and t.status <> 'Completed' and t.task like  (?1%)")
+    List<Task> searchParentTask(String searchString);
 }

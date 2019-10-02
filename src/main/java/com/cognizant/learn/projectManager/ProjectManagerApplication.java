@@ -18,20 +18,4 @@ public class ProjectManagerApplication {
 		SpringApplication.run(ProjectManagerApplication.class, args);
 	}
 
-	/*@Bean
-	public LocaleResolver localeResolver() {
-		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-		localeResolver.setDefaultLocale(Locale.US);
-		return localeResolver;
-	}
-
-	@Bean
-	public MessageSource messageSource() {
-		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("messages");
-		return messageSource;
-	}*/
-
-
-
 }

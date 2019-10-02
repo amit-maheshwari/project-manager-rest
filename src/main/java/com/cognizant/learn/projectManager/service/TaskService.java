@@ -18,7 +18,7 @@ public interface TaskService {
 
     Optional<Task> update(Task task, Long id);
 
-    List<Task> findAllParentTask();
+    List<ParentTask> findAllParentTask();
 
     List<Task> findAllTaskForProject(Long projectId);
 }

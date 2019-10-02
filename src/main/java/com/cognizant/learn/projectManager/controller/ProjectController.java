@@ -53,4 +53,18 @@ public class ProjectController {
         return ResponseEntity.created(location).build();
 
     }
+
+
+    @PutMapping("/projects/{id}")
+    public ResponseEntity<Object> updateUser(@RequestBody Project project, @PathVariable Long id) {
+
+        Optional<Project> projectOptional = projectService.update(project, Long.valueOf(id));
+
+        if (!projectOptional.isPresent())
+            return ResponseEntity.notFound().build();
+
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

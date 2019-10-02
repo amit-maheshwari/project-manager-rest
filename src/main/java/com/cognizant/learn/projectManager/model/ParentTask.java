@@ -6,8 +6,6 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ParentTask {
@@ -17,12 +15,14 @@ public class ParentTask {
     @Column(name = "Parent_ID")
     private Long parent_id;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentTask")
-    @JsonIgnoreProperties("parentTask")
-    Set<Task> tasks = new HashSet<>(0);
+    @OneToMany(mappedBy = "parentTask", fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnoreProperties("childTask")
+    Set<Task> childTasks = new HashSet<>();
 
-    @Column(name = "PARENT_TASK", nullable = false)
-    Long task_id;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "Parent_Task", referencedColumnName = "Task_ID")
+    Task task;
+
 
     public Long getParent_id() {
         return parent_id;
@@ -32,19 +32,19 @@ public class ParentTask {
         this.parent_id = parent_id;
     }
 
-    public Set<Task> getTasks() {
-        return tasks;
+    public Set<Task> getChildTask() {
+        return childTasks;
     }
 
-    public void addTasks(Task task){
-        this.tasks.add(task);
+    public void setChildTask(Set<Task> childTasks) {
+        this.childTasks = childTasks;
     }
 
-    public Long getTask_id() {
-        return task_id;
+    public Task getTask() {
+        return task;
     }
 
-    public void setTask_id(Long task_id) {
-        this.task_id = task_id;
+    public void setTask(Task task) {
+        this.task = task;
     }
 }

@@ -1,9 +1,9 @@
 package com.cognizant.learn.projectManager.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 public class Task {
@@ -14,7 +14,8 @@ public class Task {
     private Long task_id;
 
     @JoinColumn(name = "Parent_ID")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("childTask")
     ParentTask parentTask;
 
     @Column (name = "Project_ID")
@@ -33,6 +34,12 @@ public class Task {
     private int priority;
     @Column(name = "status", nullable = false)
     private String status = "Started";
+
+    @Transient
+    private boolean isCompleted;
+
+    @Transient
+    private boolean isParent;
 
 
     public Task(){};
@@ -101,4 +108,12 @@ public class Task {
         this.status = status;
     }
 
+
+    public boolean getIsParent(){
+        return this.parentTask ==null;
+    }
+
+    public boolean isCompleted() {
+        return "Completed".equals(this.status);
+    }
 }

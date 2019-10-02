@@ -27,8 +27,8 @@ public class TaskServiceImpl implements TaskService {
         Task taskExists = taskRepository.findByTaskName(task.getTask());
         if(taskExists != null)
                 throw new DuplicateException("task.exists",task.getTask());
-        if(task.getParentTask() != null && task.getParentTask().getTask_id() != null){
-            Long parentTaskId = task.getParentTask().getTask_id();
+        if(task.getParentTask() != null && task.getParentTask().getTask().getTask_id() != null){
+            Long parentTaskId = task.getParentTask().getTask().getTask_id();
             if(!taskRepository.findById(parentTaskId).isPresent()){
                 throw new EntityNotFoundException("parent.task.not.found",parentTaskId);
             }
@@ -36,11 +36,13 @@ public class TaskServiceImpl implements TaskService {
             if(parentTask != null){
                 task.setParentTask(parentTask);
             }
-        }
-        /*Optional<ParentTask> parentTask = parentTaskRepository.findById(task.getParentTask().getParent_id());
-        if(parentTask.isPresent()){
-            task.setParentTask(parentTask.get());*/
             taskRepository.save(task);
+        }else{
+            taskRepository.save(task);
+            ParentTask pt = new ParentTask();
+            pt.setTask(task);
+            parentTaskRepository.save(pt);
+        }
 
         return  task;
     }
@@ -62,17 +64,23 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Optional<Task> update(Task task, Long id) {
-        return Optional.empty();
+        Optional<Task> taskOptional = taskRepository.findById(id);
+        if(!taskOptional.isPresent())
+            return  taskOptional;
+        task.setTask_id(id);
+        taskRepository.save(task);
+        return Optional.of(task);
     }
 
     @Override
-    public List<Task> findAllParentTask() {
-        return taskRepository.findAllParentTasks();
+    public List<ParentTask> findAllParentTask() {
+        return parentTaskRepository.findAll();
     }
 
     @Override
     public List<Task> findAllTaskForProject(Long projectId){
         return taskRepository.findTasksByProjectId(projectId);
     }
+
 
 }

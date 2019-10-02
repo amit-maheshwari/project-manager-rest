@@ -53,6 +53,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Optional<Project> update(Project project, Long id) {
+        Project projectExists = projectRepository.findByProjectName(project.getProject());
+        if(projectExists != null && !projectExists.getProjectId().equals(id))
+            throw new DuplicateException("project.exists",String.valueOf(project.getProject()));
         Optional<Project> projectOptional = projectRepository.findById(id);
         if(!projectOptional.isPresent())
             return  projectOptional;
@@ -60,4 +63,5 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
         return Optional.of(project);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.cognizant.learn.projectManager.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -24,8 +25,10 @@ public class Project {
 
     private int priority;
 
-    @Column(name = "manager_id")
-    private String managerId;
+    @OneToOne(fetch =FetchType.EAGER)
+    @JoinColumn(name = "Manager_ID", referencedColumnName = "User_ID")
+    @NotNull
+    private User manager;
 
     @Transient
     private int totalTask;
@@ -82,13 +85,13 @@ public class Project {
         this.priority = priority;
     }
 
-    public String getManagerId() {
+    /*public String getManagerId() {
         return managerId;
     }
 
     public void setManagerId(String managerId) {
         this.managerId = managerId;
-    }
+    }*/
 
     public int getTotalTask() {
         return totalTask;
@@ -104,5 +107,13 @@ public class Project {
 
     public void setCompletedTask(int completedTask) {
         this.completedTask = completedTask;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 }

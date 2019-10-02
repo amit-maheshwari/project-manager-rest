@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable long id, @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public User getUser(@PathVariable long id) {
         Optional<User> user = userService.findById(id);
 
         return user.get();
@@ -57,4 +57,5 @@ public class UserController {
         return ResponseEntity.created(location).build();
 
     }
+
 }

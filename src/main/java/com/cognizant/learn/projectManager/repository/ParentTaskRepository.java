@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ParentTaskRepository extends JpaRepository<ParentTask, Long> {
 
-    @Query("select p from ParentTask p where p.task_id = ?1")
+    @Query(value="select * from parent_task p where p.Parent_Task = ?1", nativeQuery = true)
     ParentTask findByTask(Long task);
+
 }
