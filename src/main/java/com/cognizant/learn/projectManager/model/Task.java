@@ -41,6 +41,9 @@ public class Task {
     @Transient
     private boolean isParent;
 
+    @Transient
+    private User user;
+
 
     public Task(){};
 
@@ -115,5 +118,13 @@ public class Task {
 
     public boolean isCompleted() {
         return "Completed".equals(this.status);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

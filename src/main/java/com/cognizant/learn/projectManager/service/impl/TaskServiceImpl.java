@@ -4,8 +4,10 @@ import com.cognizant.learn.projectManager.exception.DuplicateException;
 import com.cognizant.learn.projectManager.exception.EntityNotFoundException;
 import com.cognizant.learn.projectManager.model.ParentTask;
 import com.cognizant.learn.projectManager.model.Task;
+import com.cognizant.learn.projectManager.model.User;
 import com.cognizant.learn.projectManager.repository.ParentTaskRepository;
 import com.cognizant.learn.projectManager.repository.TaskRepository;
+import com.cognizant.learn.projectManager.repository.UserRepository;
 import com.cognizant.learn.projectManager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     ParentTaskRepository parentTaskRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Task add(Task task) {
@@ -43,7 +48,9 @@ public class TaskServiceImpl implements TaskService {
             pt.setTask(task);
             parentTaskRepository.save(pt);
         }
-
+        User user = task.getUser();
+        user.setTask_id(task.getTask_id());
+        userRepository.save(user);
         return  task;
     }
 
@@ -69,6 +76,9 @@ public class TaskServiceImpl implements TaskService {
             return  taskOptional;
         task.setTask_id(id);
         taskRepository.save(task);
+        if(task.isCompleted()){
+            userRepository.updateTaskId(task.getTask_id());
+        }
         return Optional.of(task);
     }
 
