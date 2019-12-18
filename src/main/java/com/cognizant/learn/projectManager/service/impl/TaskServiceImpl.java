@@ -48,9 +48,11 @@ public class TaskServiceImpl implements TaskService {
             pt.setTask(task);
             parentTaskRepository.save(pt);
         }
-        User user = task.getUser();
-        user.setTask_id(task.getTask_id());
-        userRepository.save(user);
+        if(task.getParentTask() != null) {
+            User user = task.getUser();
+            user.setTask_id(task.getTask_id());
+            userRepository.save(user);
+        }
         return  task;
     }
 
